@@ -1,0 +1,44 @@
+{
+  "name": "json-to-synthesis",
+  "version": "1.0.0",
+  "description": "Synthesizes several JSON documents into a single document",
+  "main": "index.js",
+  "scripts": {
+    "start": "index.js",
+    "prettier": "prettier --write index.js lib",
+    "coverage": "echo 'No test provided.'",
+    "test": "echo 'No test provided.'",
+    "ci": "echo 'No test provided.'",
+    "pre-commit": "npm run prettier && npm run test",
+    "commit": "git add . && git-cz",
+    "version": "standard-version",
+    "push": "git push --follow-tags",
+    "release": "npm run commit && npm run version && npm run push && npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ttessarolo/json-to-synthesis.git"
+  },
+  "keywords": [],
+  "author": "Tommaso Tessarolo <ttessarolo@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ttessarolo/json-to-synthesis/issues"
+  },
+  "homepage": "https://github.com/ttessarolo/json-to-synthesis#readme",
+  "dependencies": {
+    "clone": "^2.1.2",
+    "percom": "^1.1.3",
+    "serialize-javascript": "^6.0.0"
+  },
+  "devDependencies": {
+    "commitizen": "^4.2.4",
+    "cz-conventional-changelog": "^3.3.0",
+    "standard-version": "^9.3.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
