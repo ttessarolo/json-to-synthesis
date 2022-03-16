@@ -170,7 +170,7 @@ export default class Synthesizer extends Events {
     // Apply Rules
     const finalResults = {};
     Object.entries(sortedResults).forEach(([k, v]) => {
-      const { threshold, mode, operator } = regole.find((f) => f.key === k);
+      const { threshold, mode, operator, cap } = regole.find((f) => f.key === k);
 
       if (mode === "top") {
         finalResults[k] = v.slice(0, threshold).map((k) => k[0]);
@@ -193,6 +193,7 @@ export default class Synthesizer extends Events {
             finalResults[k] = v.filter((j) => j[1].percentage >= threshold).map((i) => i[0]);
           }
         }
+        if (cap) finalResults[k] = finalResults[k].slice(0, cap);
       }
     });
 
