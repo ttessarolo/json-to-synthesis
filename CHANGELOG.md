@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://bitbucket.org/ttessarolo/json-to-synthesis/branches/compare/v1.2.0%0Dv1.3.0) (2022-03-21)
+
+
+### Features
+
+* include optional stats in trasform feedback ([a31030b](https://github.com/ttessarolo/json-to-synthesis/commits/a31030b355ae69f854f264bf047f3a7942dc4c79))
+
 ## [1.2.0](https://bitbucket.org/ttessarolo/json-to-synthesis/branches/compare/v1.1.0%0Dv1.2.0) (2022-03-16)
 
 
