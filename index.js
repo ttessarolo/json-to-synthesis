@@ -83,7 +83,7 @@ export default class Synthesizer extends Events {
     return this.rules;
   }
 
-  async transform({ docs, rules, dataPath, outputStream, cb }) {
+  async transform({ docs, rules, dataPath, includeStats = false, outputStream, cb }) {
     if (checkStream(docs) && (!rules || !this.rules)) {
       throw new Error("You Must Specify Rules when using a Stream");
     }
@@ -169,40 +169,51 @@ export default class Synthesizer extends Events {
 
     // Apply Rules
     const finalResults = {};
+    const stats = {};
+
     Object.entries(sortedResults).forEach(([k, v]) => {
       const { threshold, mode, operator, cap } = regole.find((f) => f.key === k);
 
       if (mode === "top") {
         finalResults[k] = v.slice(0, threshold).map((k) => k[0]);
+        if (includeStats) stats[k] = v.slice(0, threshold);
       } else if (mode === "percentage") {
         switch (operator) {
           case "equal": {
             finalResults[k] = v.filter((j) => j[1].percentage === threshold).map((i) => i[0]);
+            if (includeStats) stats[k] = v.filter((j) => j[1].percentage === threshold);
           }
           case "lt": {
             finalResults[k] = v.filter((j) => j[1].percentage < threshold).map((i) => i[0]);
+            if (includeStats) stats[k] = v.filter((j) => j[1].percentage < threshold);
           }
           case "lte": {
             finalResults[k] = v.filter((j) => j[1].percentage <= threshold).map((i) => i[0]);
+            if (includeStats) stats[k] = v.filter((j) => j[1].percentage <= threshold);
           }
           case "gt": {
             finalResults[k] = v.filter((j) => j[1].percentage > threshold).map((i) => i[0]);
+            if (includeStats) stats[k] = v.filter((j) => j[1].percentage > threshold);
           }
           default: {
             // gte
             finalResults[k] = v.filter((j) => j[1].percentage >= threshold).map((i) => i[0]);
+            if (includeStats) stats[k] = v.filter((j) => j[1].percentage >= threshold);
           }
         }
-        if (cap) finalResults[k] = finalResults[k].slice(0, cap);
+        if (cap) {
+          finalResults[k] = finalResults[k].slice(0, cap);
+          if (includeStats) stats[k] = stats[k].slice(0, cap);
+        }
       }
     });
 
-    this.emit("transformed", { results: finalResults, chunk: docs });
+    this.emit("transformed", { results: finalResults, chunk: docs, stats });
 
-    if (outputStream) outputStream.write({ results: finalResults, chunk: docs });
-    if (cb) cb(null, finalResults, docs);
+    if (outputStream) outputStream.write({ results: finalResults, chunk: docs, stats });
+    if (cb) cb(null, finalResults, docs, stats);
 
-    return finalResults;
+    return includeStats ? [finalResults, stats] : finalResults;
   }
 
   extractDataFromModel(raw) {
